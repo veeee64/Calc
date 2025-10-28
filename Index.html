@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator Deluxe Edition</title>
+  <style>
+    body {
+      background: linear-gradient(45deg, #0f172a, #1e3a8a);
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      overflow: hidden;
+    }
+    .calculator {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 15px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button.locked {
+      background: rgba(255,0,0,0.4);
+    }
+    button:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #60a5fa;
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+    }
+    .popup input {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input id="display" type="text" disabled value="Please unlock a button first 🔒" style="width:100%;padding:10px;text-align:center;border:none;border-radius:5px;background:rgba(255,255,255,0.2);color:white;">
+    <div class="buttons" id="buttons"></div>
+  </div>
+
+  <div class="popup" id="popup">
+    <h3>🔒 Unlock Button</h3>
+    <p>Enter your “credit card” to unlock this feature (totally not real 😉)</p>
+    <input type="text" placeholder="Card Number" />
+    <input type="text" placeholder="Expiration" />
+    <input type="text" placeholder="CVC" />
+    <button onclick="unlock()">Unlock!</button>
+  </div>
+
+  <script>
+    const popup = document.getElementById("popup");
+    const buttonsContainer = document.getElementById("buttons");
+    let targetButton = null;
+
+    const symbols = ['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','=','+'];
+    symbols.forEach(symbol => {
+      const btn = document.createElement("button");
+      btn.textContent = symbol;
+      btn.classList.add("locked");
+      btn.onclick = () => openPopup(btn);
+      buttonsContainer.appendChild(btn);
+    });
+
+    function openPopup(btn) {
+      targetButton = btn;
+      popup.style.display = "block";
+    }
+
+    function unlock() {
+      if (targetButton) {
+        targetButton.classList.remove("locked");
+        targetButton.style.background = "rgba(0,255,0,0.4)";
+        targetButton.onclick = () => document.getElementById("display").value += targetButton.textContent;
+      }
+      popup.style.display = "none";
+    }
+  </script>
+</body>
+</html>
